@@ -1,7 +1,6 @@
 #!/usr/bin/env -S npx tsx
-import { readFile, readdir, writeFile } from 'fs/promises';
+import { readFile, writeFile, glob as fsGlob } from 'node:fs/promises';
 import { join } from 'path';
-import { glob } from 'glob';
 import { homedir } from 'os';
 
 interface Message {
@@ -21,23 +20,23 @@ interface JsonLine {
 async function extractTextFromJsonl(inputPattern: string, outputFile: string): Promise<void> {
   try {
     // Get all .jsonl files matching the pattern
-    const jsonlFiles = await glob(inputPattern);
-    
+    const jsonlFiles = await Array.fromAsync(fsGlob(inputPattern));
+
     console.log(`Found ${jsonlFiles.length} JSONL files to process`);
-    
+
     const allTexts: string[] = [];
-    
+
     for (const filePath of jsonlFiles) {
       console.log(`Processing ${filePath}...`);
       const content = await readFile(filePath, 'utf-8');
       const lines = content.trim().split('\n');
-      
+
       const fileTexts: string[] = [];
-      
+
       for (const line of lines) {
         try {
           const data: JsonLine = JSON.parse(line);
-          
+
           // Extract text from message content
           if (data.message?.content) {
             for (const item of data.message.content) {
@@ -50,22 +49,22 @@ async function extractTextFromJsonl(inputPattern: string, outputFile: string): P
           console.warn(`Failed to parse line in ${filePath}: ${err}`);
         }
       }
-      
+
       if (fileTexts.length > 0) {
         allTexts.push(`\n\n===== File: ${filePath} =====\n`);
         allTexts.push(...fileTexts.map((text, idx) => `\n--- Message ${idx + 1} ---\n${text}`));
       }
     }
-    
+
     // Write all extracted text to output file
     const outputContent = allTexts.join('\n');
     await writeFile(outputFile, outputContent, 'utf-8');
-    
+
     console.log(`\nExtraction complete!`);
     console.log(`Total files processed: ${jsonlFiles.length}`);
     console.log(`Output written to: ${outputFile}`);
     console.log(`Output size: ${(outputContent.length / 1024 / 1024).toFixed(2)} MB`);
-    
+
   } catch (error) {
     console.error('Error extracting text:', error);
     process.exit(1);
