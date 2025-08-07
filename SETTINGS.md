@@ -34,7 +34,7 @@ You can pass normal CLI args through to Claude, for example print mode:
   - `UserPromptSubmit`: echoes a reminder to prefer container-use tools
   - `Stop`: runs `hooks/cc-stop.ts` from this project using `$CLAUDE_PROJECT_DIR`
 - MCP servers: adds the `container-use` stdio server locally via `settings/cuse-mcp.json`
-- Allowed tools and bypass permissions are applied via the launcher script flags
+- Allowed tools are specified in `settings/cuse-settings.json` under `permissions.allow` and `permissions.deny`, so the launcher script doesn’t need a long `--allowedTools` flag or `--dangerously-skip-permissions`.
 
 #### Editing hooks
 

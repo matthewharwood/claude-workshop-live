@@ -1,6 +1,25 @@
 {
   "permissions": {
-    "defaultMode": "bypassPermissions"
+    "defaultMode": "default",
+    "allow": [
+      "mcp__container-use__environment_*",
+      "mcp__deepwiki__ask_question"
+    ],
+    "deny": [
+      "Bash(*)",
+      "Edit",
+      "MultiEdit",
+      "Write",
+      "Read",
+      "LS",
+      "Glob",
+      "Grep",
+      "Task",
+      "WebFetch",
+      "WebSearch",
+      "NotebookEdit",
+      "NotebookRead"
+    ]
   },
   "hooks": {
     "UserPromptSubmit": [
