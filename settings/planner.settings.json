@@ -1,0 +1,44 @@
+{
+  "permissions": {
+    "defaultMode": "default",
+    "allow": ["mcp__deepwiki__ask_question"],
+    "deny": [
+      "Bash(*)",
+      "Edit",
+      "MultiEdit",
+      "Write",
+      "Read",
+      "LS",
+      "Glob",
+      "Grep",
+      "Task",
+      "WebFetch",
+      "WebSearch",
+      "NotebookEdit",
+      "NotebookRead"
+    ]
+  },
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"Planning mode: prefer DeepWiki and non-destructive tools; do not edit files.\""
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun run $CLAUDE_PROJECT_DIR/hooks/cc-stop.ts"
+          }
+        ]
+      }
+    ]
+  }
+}
+

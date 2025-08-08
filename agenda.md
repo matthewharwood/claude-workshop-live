@@ -47,3 +47,27 @@
 
 *   **Topics:** Multimodality: Video input (The "Secret Sauce"); Orchestration (N8N).
 *   *Speaker Notes:* The climax. Demo the `vid` alias workflow (Record UI -> Gemini analysis -> Claude execution). Show the N8N security audit email workflow. End by emphasizing Claude Code as a 24/7 automation engine.
+
+---
+
+#### Notes: Verification vs. Trust
+
+- **Principle**: Default to verification. Trust is earned after repeatable, automated checks pass.
+- **Logs-first verification** (fastest feedback):
+  - Ask the agent to instrument its own changes: add structured logs (JSON lines) with stable keys.
+  - Prefer file-based logs under `logs/` (e.g., `logs/agent-demo.log`) or stdout with a clear prefix (e.g., `[VERIFY]`).
+  - Example voice prompt: "Add info-level logs at start/end of function and on error paths, with fields: `module`, `action`, `status`, `elapsedMs`."
+- **Tests** (deeper assurance):
+  - Unit tests for pure logic; integration tests for boundaries (DB, HTTP, filesystem); smoke tests for "does it basically run?".
+  - Ask the agent to author tests alongside code, then run them.
+  - Favor a minimal smoke test first (fast pass/fail signal), then expand.
+- **Runtime guards**:
+  - Feature flags or env toggles to confine impact during verification.
+  - Dry-run modes that log intended actions without executing.
+- **Demo plan (logs-aware agent)**:
+  1) Have the agent create `logs/verify-demo.log` and add instrumentation to a small script.
+  2) Start a tail in a terminal: `tail -f logs/verify-demo.log`.
+  3) Ask Claude Code to run the script and watch for specific log events (it knows the schema it wrote).
+  4) Iterate until expected `[VERIFY]` events appear; then request a quick smoke test to assert those events occur.
+  5) Optional: promote to an integration test that asserts side-effects (e.g., file written, HTTP 200).
+  - *Speaker Notes:* Emphasize that the agent both defines the log schema and observes it during execution, closing the loop from intent → action → evidence.
