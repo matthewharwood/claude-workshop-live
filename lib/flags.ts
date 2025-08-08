@@ -27,7 +27,7 @@ export function toFlags(flagsObj: ClaudeFlags): string[] {
  * User flags override defaults. Uses parsed command line args automatically.
  */
 export function buildClaudeFlags(
-    defaults: ClaudeFlags, 
+    defaults: ClaudeFlags,
     userFlags: ClaudeFlags = args.values as ClaudeFlags
 ): string[] {
     const merged = { ...defaults, ...userFlags }
@@ -39,4 +39,7 @@ export function buildClaudeFlags(
  */
 export function getPositionals(): string[] {
     return args.positionals
-} 
+}
+
+// Expose parsed args for advanced cases where direct access is helpful
+export const parsedArgs = args

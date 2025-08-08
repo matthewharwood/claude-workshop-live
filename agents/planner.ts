@@ -11,8 +11,8 @@
 import { spawn } from "bun";
 
 function resolvePath(relativeFromThisFile: string): string {
-    const url = new URL(relativeFromThisFile, import.meta.url);
-    return url.pathname;
+	const url = new URL(relativeFromThisFile, import.meta.url);
+	return url.pathname;
 }
 
 const projectRoot = resolvePath("../");
@@ -20,27 +20,27 @@ const settingsPath = resolvePath("../settings/planner.settings.json");
 const mcpPath = resolvePath("../settings/planner.mcp.json");
 
 const args = [
-    "--settings",
-    settingsPath,
-    "--mcp-config",
-    mcpPath,
-    ...process.argv.slice(2),
+	"--settings",
+	settingsPath,
+	"--mcp-config",
+	mcpPath,
+	...process.argv.slice(2),
 ];
 
 const child = spawn(["claude", ...args], {
-    stdin: "inherit",
-    stdout: "inherit",
-    stderr: "inherit",
-    env: {
-        ...process.env,
-        CLAUDE_PROJECT_DIR: projectRoot,
-    },
+	stdin: "inherit",
+	stdout: "inherit",
+	stderr: "inherit",
+	env: {
+		...process.env,
+		CLAUDE_PROJECT_DIR: projectRoot,
+	},
 });
 
 const onExit = () => {
-    try {
-        child.kill("SIGTERM");
-    } catch { }
+	try {
+		child.kill("SIGTERM");
+	} catch {}
 };
 
 process.on("SIGINT", onExit);
@@ -48,6 +48,3 @@ process.on("SIGTERM", onExit);
 
 await child.exited;
 process.exit(child.exitCode ?? 0);
-
-
-
