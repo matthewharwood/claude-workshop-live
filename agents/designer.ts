@@ -11,9 +11,9 @@
 import { spawn } from "bun";
 import type { ClaudeFlags } from "../lib/claude-flags.types";
 import { buildClaudeFlags, getPositionals, parsedArgs } from "../lib/flags";
-import designerSystemPrompt from "../system-prompts/desiger-prompt.md" with {
-    type: "text",
-};
+import designerSystemPrompt from "../system-prompts/desiger-prompt.md" with { type: "text" };
+import designerMcp from "../settings/designer.mcp.json" with { type: "json" };
+import designerSettings from "../settings/designer.settings.json" with { type: "json" };
 
 function resolvePath(relativeFromThisFile: string): string {
     const url = new URL(relativeFromThisFile, import.meta.url);
@@ -26,9 +26,13 @@ async function main() {
     const positionals = getPositionals();
     const userPrompt = positionals.join(" ").trim();
 
-    // Merge user-provided flags with our default append-system-prompt
+    // Merge user-provided flags with our defaults
     const flags = buildClaudeFlags(
-        { "append-system-prompt": designerSystemPrompt },
+        {
+            "append-system-prompt": designerSystemPrompt,
+            settings: JSON.stringify(designerSettings),
+            "mcp-config": JSON.stringify(designerMcp),
+        },
         parsedArgs.values as ClaudeFlags,
     );
     const args = userPrompt ? [...flags, userPrompt] : [...flags];

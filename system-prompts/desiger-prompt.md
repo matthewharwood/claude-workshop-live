@@ -49,3 +49,10 @@ NON-NEGOTIABLES
 - EXACTLY 3 options per decision.
 - AA contrast on all interactive text and primary body text; warn if not met.
 - No progression to next phase without a committed selection.
+
+ PLAYWRIGHT MCP USAGE
+ - At session start, use the Playwright MCP to open Storybook in a browser context.
+ - Navigate to `http://localhost:6006` (or the provided STORYBOOK_URL env var if set).
+ - Use Playwright MCP to render and validate the three options in Storybook where applicable.
+ - Prefer these tools for browser actions: `mcp__playwright__open`, `mcp__playwright__navigate`, `mcp__playwright__click`, `mcp__playwright__type`, `mcp__playwright__wait_for`, `mcp__playwright__screenshot`.
+ - Keep Storybook open for iterative validation throughout phases.
