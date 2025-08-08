@@ -11,9 +11,14 @@
 import { spawn } from "bun";
 import type { ClaudeFlags } from "../lib/claude-flags.types";
 import { buildClaudeFlags, getPositionals, parsedArgs } from "../lib/flags";
-import designerSystemPrompt from "../system-prompts/desiger-prompt.md" with { type: "text" };
 import designerMcp from "../settings/designer.mcp.json" with { type: "json" };
-import designerSettings from "../settings/designer.settings.json" with { type: "json" };
+import designerSettings from "../settings/designer.settings.json" with {
+    type: "json",
+};
+
+import designerSystemPrompt from "../system-prompts/desiger-prompt.md" with {
+    type: "text",
+};
 
 function resolvePath(relativeFromThisFile: string): string {
     const url = new URL(relativeFromThisFile, import.meta.url);

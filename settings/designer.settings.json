@@ -9,21 +9,6 @@
       "mcp__playwright__press",
       "mcp__playwright__wait_for",
       "mcp__playwright__screenshot"
-    ],
-    "deny": [
-      "Bash(*)",
-      "Edit",
-      "MultiEdit",
-      "Write",
-      "Read",
-      "LS",
-      "Glob",
-      "Grep",
-      "Task",
-      "WebFetch",
-      "WebSearch",
-      "NotebookEdit",
-      "NotebookRead"
     ]
   },
   "hooks": {
