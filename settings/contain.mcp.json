@@ -2,9 +2,8 @@
   "mcpServers": {
     "container-use": {
       "type": "stdio",
-      "command": "npx",
-      "args": ["-y", "container-use", "stdio"]
+      "command": "container-use",
+      "args": ["stdio"]
     }
   }
 }
-

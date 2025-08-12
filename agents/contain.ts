@@ -21,7 +21,12 @@
  *     Optionally publish an internal `npx` wrapper that runs this entrypoint with absolute paths.
  */
 
+
 import { spawn } from "bun";
+import containMcp from "../settings/contain.mcp.json" with { type: "json" };
+import containSettings from "../settings/contain.settings.json" with {
+	type: "json",
+};
 
 function resolvePath(relativeFromThisFile: string): string {
 	const url = new URL(relativeFromThisFile, import.meta.url);
@@ -29,14 +34,12 @@ function resolvePath(relativeFromThisFile: string): string {
 }
 
 const projectRoot = resolvePath("../");
-const settingsPath = resolvePath("../settings/contain.settings.json");
-const mcpPath = resolvePath("../settings/contain.mcp.json");
 
 const args = [
 	"--settings",
-	settingsPath,
+	JSON.stringify(containSettings),
 	"--mcp-config",
-	mcpPath,
+	JSON.stringify(containMcp),
 	...process.argv.slice(2),
 ];
 
@@ -53,7 +56,7 @@ const child = spawn(["claude", ...args], {
 const onExit = () => {
 	try {
 		child.kill("SIGTERM");
-	} catch {}
+	} catch { }
 };
 
 process.on("SIGINT", onExit);

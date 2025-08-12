@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "defaultMode": "default",
+    "allow": [
+      "mcp__playwright__navigate",
+      "mcp__playwright__open",
+      "mcp__playwright__click",
+      "mcp__playwright__type",
+      "mcp__playwright__press",
+      "mcp__playwright__wait_for",
+      "mcp__playwright__screenshot"
+    ]
+  },
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"Builder mode: provide a markdown build plan or I'll help create one. Use 'proceed', 'modify', or 'skip' to control the build process.\""
+          }
+        ]
+      }
+    ]
+  }
+}

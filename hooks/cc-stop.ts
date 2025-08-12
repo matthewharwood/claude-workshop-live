@@ -22,10 +22,7 @@ await Bun.write(payloadPath, JSON.stringify(input, null, 2))
 
 // Read the transcript_path file
 const transcript = await Bun.file(input.transcript_path).text()
-if (!transcript.includes("container-use merge")) {
-  process.stdout.write(JSON.stringify({ decision: "block", reason: "Container-use merge not found in transcript. You must run container-use merge with the branch name to fully complete the task." }, null, 2))
-  process.exit(0)
-}
 
-process.stdout.write(JSON.stringify({ decision: undefined, reason: "Container-use merge found in transcript" }, null, 2))
+// Allow stopping without container-use merge requirement
+process.stdout.write(JSON.stringify({ decision: undefined, reason: "Stop hook processed successfully" }, null, 2))
 process.exit(0)

@@ -24,6 +24,8 @@ Claude Workshop Live - A collection of TypeScript agents and utilities for enhan
 - `bun run agents/gemsum.ts` - Gemini-powered summarization
 - `bun run agents/claude-mix.ts` - Claude with mixed capabilities
 - `bun run agents/parallel.ts` - Run parallel operations
+- `bun run agents/designer.ts` - Design mode with Figma/Playwright integrations
+- `bun run agents/chain.ts` - Chain multiple Claude instances with data flow
 
 ## Code Architecture
 
@@ -49,6 +51,8 @@ Claude Workshop Live - A collection of TypeScript agents and utilities for enhan
 - Use `resolvePath()` pattern for resolving relative paths in agents
 - Pass environment variables like `CLAUDE_PROJECT_DIR` to spawned processes
 - Always handle SIGINT/SIGTERM for clean subprocess termination
+- When working with containers, always merge changes back with `container-use merge <branch-name>`
+- Container environments don't include uncommitted changes - commit first if needed
 
 ## Code Style
 
