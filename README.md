@@ -138,6 +138,7 @@ Each agent is a specialized Claude instance with custom configurations:
 - **parallel** - Run parallel operations
 - **gemsum** - Gemini-powered summarization
 - **claude-mix** - Mixed capabilities mode
+- **orient** - Generates a comprehensive orientation map (markdown) for a concept, feature, or file
 
 ## Development Commands
 
@@ -198,3 +199,24 @@ bun compile agents/my-agent.ts
 - Use environment variables like `CLAUDE_PROJECT_DIR` to pass context to agents
 
 This project was created using `bun init` in bun v1.2.9.
+
+## Orient Agent
+
+Generate an orientation map that traces files, dependencies, dependents, functions, event flow hints, and tests around a concept or file.
+
+Usage:
+
+```bash
+# Analyze a concept/keyword
+bun run agents/orient.ts "authentication"
+
+# Analyze a specific file
+bun run agents/orient.ts src/utils/loader.ts
+
+# Options
+bun run agents/orient.ts router --out-dir ./orientations --max-files 0 --ext ts,tsx,js,jsx,json,md --debug
+```
+
+Output:
+- Creates a markdown file in `./orientations/` named like `authentication-YYYYMMDD-HHMMSS.md`.
+- Sections include: Overview, Files Referencing, Dependencies/Dependents (if file target), Functions Near Topic, Event Flow Hints, Tests Touching Topic, and Next Steps.

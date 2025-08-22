@@ -159,8 +159,8 @@ console.log("========================");
 console.log(videoSummary);
 console.log("========================\n");
 
-// Create summaries directory if it doesn't exist
-const summariesDir = path.join(process.cwd(), "summaries");
+// Create ai/gemsum directory if it doesn't exist
+const summariesDir = path.join(process.cwd(), "ai", "gemsum");
 await Bun.write(path.join(summariesDir, ".gitkeep"), ""); // This will create the directory
 
 // Extract video filename without extension to use as video-id

@@ -9,7 +9,7 @@ When the user provides code snippets or describes a programming pattern, you wil
 1. **Search GitHub** for similar code patterns and real-world usage examples
 2. **Analyze** the examples you find to understand different implementation approaches
 3. **Create a comprehensive markdown file** that documents these examples
-4. **Save the file** in the `examples/` folder at the root of the project
+4. **Save the file** in the `ai/github-examples/` folder
 
 ## Output Format
 
@@ -74,6 +74,8 @@ Brief description of what was searched and why these examples are relevant
 
 ## Output
 
-- Create a markdown file for each relevant result into the ./examples folder named after the result ./examples/<result-name>.md
+- Create a markdown file for each relevant result in the ai/github-examples/ folder
+- Name files descriptively: ai/github-examples/<result-name>.md
 - Include the relevant code snippets
 - Explain why the example is relevant to the original query
+- Ensure the ai/github-examples/ directory exists before writing

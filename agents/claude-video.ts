@@ -150,8 +150,11 @@ console.log("================================\n");
 
 // Save the instructions to a file for reference
 const videoPathParsed = path.parse(videoPath);
+// Create ai/claude-video directory if it doesn't exist
+const outputDir = path.join(process.cwd(), "ai", "claude-video");
+await Bun.write(path.join(outputDir, ".gitkeep"), ""); // This will create the directory
 const instructionsPath = path.join(
-	videoPathParsed.dir,
+	outputDir,
 	`${videoPathParsed.name}-instructions.md`,
 );
 // Use Bun.write for file writing
