@@ -1,0 +1,9 @@
+{
+	"mcpServers": {
+		"llmutils": {
+			"command": "llmutils",
+			"args": [],
+			"env": {}
+		}
+	}
+}

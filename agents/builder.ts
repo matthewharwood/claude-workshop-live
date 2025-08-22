@@ -52,7 +52,6 @@ async function main() {
 		},
 	});
 
-
 	await child.exited;
 	process.exit(child.exitCode ?? 0);
 }

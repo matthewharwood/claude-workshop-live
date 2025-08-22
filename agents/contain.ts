@@ -21,7 +21,6 @@
  *     Optionally publish an internal `npx` wrapper that runs this entrypoint with absolute paths.
  */
 
-
 import { spawn } from "bun";
 import containMcp from "../settings/contain.mcp.json" with { type: "json" };
 import containSettings from "../settings/contain.settings.json" with {
@@ -56,7 +55,7 @@ const child = spawn(["claude", ...args], {
 const onExit = () => {
 	try {
 		child.kill("SIGTERM");
-	} catch { }
+	} catch {}
 };
 
 process.on("SIGINT", onExit);

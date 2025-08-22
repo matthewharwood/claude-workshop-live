@@ -1,63 +1,64 @@
 #!/usr/bin/env -S bun run
+
 /**
  * ORIENT: Get oriented in your codebase with context-aware analysis
- * 
+ *
  * This agent helps you understand your current project by analyzing:
  * - Project structure and key files
  * - Available commands and scripts
  * - Dependencies and technologies used
  * - Recent changes and git history
  * - TODO items and documentation
- * 
+ *
  * Usage:
  *   bun run agents/orient.ts                 # Full orientation analysis
  *   bun run agents/orient.ts --quick         # Quick overview only
  *   bun run agents/orient.ts --focus <area>  # Focus on specific area (structure/commands/tech/changes)
  */
 
-import { spawn } from "bun";
 import { parseArgs } from "node:util";
+import { spawn } from "bun";
 import type { ClaudeFlags } from "../lib/claude-flags.types";
 import { buildClaudeFlags, getPositionals, parsedArgs } from "../lib/flags";
 import orientMcp from "../settings/orient.mcp.json" with { type: "json" };
 import orientSettings from "../settings/orient.settings.json" with {
-    type: "json",
+	type: "json",
 };
 import orientSystemPrompt from "../system-prompts/orient-prompt.md" with {
-    type: "text",
+	type: "text",
 };
 
 function resolvePath(relativeFromThisFile: string): string {
-    const url = new URL(relativeFromThisFile, import.meta.url);
-    return url.pathname;
+	const url = new URL(relativeFromThisFile, import.meta.url);
+	return url.pathname;
 }
 
 const projectRoot = resolvePath("../");
 
 // Parse orient-specific arguments
 const args = parseArgs({
-    allowPositionals: true,
-    options: {
-        quick: {
-            type: "boolean",
-            short: "q",
-            default: false,
-        },
-        focus: {
-            type: "string",
-            short: "f",
-        },
-        help: {
-            type: "boolean",
-            short: "h",
-            default: false,
-        },
-    },
-    strict: false, // Allow unknown arguments to pass through
+	allowPositionals: true,
+	options: {
+		quick: {
+			type: "boolean",
+			short: "q",
+			default: false,
+		},
+		focus: {
+			type: "string",
+			short: "f",
+		},
+		help: {
+			type: "boolean",
+			short: "h",
+			default: false,
+		},
+	},
+	strict: false, // Allow unknown arguments to pass through
 });
 
 function showHelp() {
-    console.log(`
+	console.log(`
 ORIENT: Get oriented in your codebase with context-aware analysis
 
 Usage:
@@ -85,91 +86,100 @@ Notes:
 }
 
 async function main() {
-    if (args.values.help) {
-        showHelp();
-        process.exit(0);
-    }
+	if (args.values.help) {
+		showHelp();
+		process.exit(0);
+	}
 
-    const positionals = getPositionals();
-    let userPrompt = positionals.join(" ").trim();
+	const positionals = getPositionals();
+	const userPrompt = positionals.join(" ").trim();
 
-    // Build the orientation prompt based on options
-    const orientationTasks = [];
-    
-    if (args.values.quick) {
-        orientationTasks.push("Provide a quick overview of this project in 2-3 paragraphs");
-    } else if (args.values.focus) {
-        const focusArea = args.values.focus;
-        switch (focusArea) {
-            case "structure":
-                orientationTasks.push("Analyze the project structure and file organization");
-                orientationTasks.push("Identify key directories and their purposes");
-                orientationTasks.push("Find the main entry points");
-                break;
-            case "commands":
-                orientationTasks.push("List all available commands and scripts");
-                orientationTasks.push("Explain what each command does");
-                orientationTasks.push("Identify development, build, and test commands");
-                break;
-            case "tech":
-                orientationTasks.push("Identify all technologies and frameworks used");
-                orientationTasks.push("List key dependencies and their purposes");
-                orientationTasks.push("Analyze the tech stack and architecture");
-                break;
-            case "changes":
-                orientationTasks.push("Show recent git commits");
-                orientationTasks.push("Identify areas of active development");
-                orientationTasks.push("Find any TODO items or incomplete features");
-                break;
-            default:
-                console.error(`Unknown focus area: ${focusArea}`);
-                console.log("Valid areas: structure, commands, tech, changes");
-                process.exit(1);
-        }
-    } else {
-        // Full orientation
-        orientationTasks.push("Provide a comprehensive orientation of this project");
-        orientationTasks.push("Include project structure, available commands, tech stack, and recent changes");
-        orientationTasks.push("Identify any patterns or conventions used");
-        orientationTasks.push("Note any important configuration files");
-    }
+	// Build the orientation prompt based on options
+	const orientationTasks = [];
 
-    // Combine tasks with user prompt if provided
-    const fullPrompt = orientationTasks.join(". ") + 
-        (userPrompt ? `\n\nAdditional context: ${userPrompt}` : "");
+	if (args.values.quick) {
+		orientationTasks.push(
+			"Provide a quick overview of this project in 2-3 paragraphs",
+		);
+	} else if (args.values.focus) {
+		const focusArea = args.values.focus;
+		switch (focusArea) {
+			case "structure":
+				orientationTasks.push(
+					"Analyze the project structure and file organization",
+				);
+				orientationTasks.push("Identify key directories and their purposes");
+				orientationTasks.push("Find the main entry points");
+				break;
+			case "commands":
+				orientationTasks.push("List all available commands and scripts");
+				orientationTasks.push("Explain what each command does");
+				orientationTasks.push("Identify development, build, and test commands");
+				break;
+			case "tech":
+				orientationTasks.push("Identify all technologies and frameworks used");
+				orientationTasks.push("List key dependencies and their purposes");
+				orientationTasks.push("Analyze the tech stack and architecture");
+				break;
+			case "changes":
+				orientationTasks.push("Show recent git commits");
+				orientationTasks.push("Identify areas of active development");
+				orientationTasks.push("Find any TODO items or incomplete features");
+				break;
+			default:
+				console.error(`Unknown focus area: ${focusArea}`);
+				console.log("Valid areas: structure, commands, tech, changes");
+				process.exit(1);
+		}
+	} else {
+		// Full orientation
+		orientationTasks.push(
+			"Provide a comprehensive orientation of this project",
+		);
+		orientationTasks.push(
+			"Include project structure, available commands, tech stack, and recent changes",
+		);
+		orientationTasks.push("Identify any patterns or conventions used");
+		orientationTasks.push("Note any important configuration files");
+	}
 
-    // Merge user-provided flags with our defaults
-    const flags = buildClaudeFlags(
-        {
-            "append-system-prompt": orientSystemPrompt,
-            settings: JSON.stringify(orientSettings),
-            "mcp-config": JSON.stringify(orientMcp),
-        },
-        parsedArgs.values as ClaudeFlags,
-    );
-    const finalArgs = fullPrompt ? [...flags, fullPrompt] : [...flags];
+	// Combine tasks with user prompt if provided
+	const fullPrompt =
+		orientationTasks.join(". ") +
+		(userPrompt ? `\n\nAdditional context: ${userPrompt}` : "");
 
-    const child = spawn(["claude", ...finalArgs], {
-        stdin: "inherit",
-        stdout: "inherit",
-        stderr: "inherit",
-        env: {
-            ...process.env,
-            CLAUDE_PROJECT_DIR: projectRoot,
-        },
-    });
+	// Merge user-provided flags with our defaults
+	const flags = buildClaudeFlags(
+		{
+			"append-system-prompt": orientSystemPrompt,
+			settings: JSON.stringify(orientSettings),
+			"mcp-config": JSON.stringify(orientMcp),
+		},
+		parsedArgs.values as ClaudeFlags,
+	);
+	const finalArgs = fullPrompt ? [...flags, fullPrompt] : [...flags];
 
-    const onExit = () => {
-        try {
-            child.kill("SIGTERM");
-        } catch {}
-    };
+	const child = spawn(["claude", ...finalArgs], {
+		stdin: "inherit",
+		stdout: "inherit",
+		stderr: "inherit",
+		env: {
+			...process.env,
+			CLAUDE_PROJECT_DIR: projectRoot,
+		},
+	});
 
-    process.on("SIGINT", onExit);
-    process.on("SIGTERM", onExit);
+	const onExit = () => {
+		try {
+			child.kill("SIGTERM");
+		} catch {}
+	};
 
-    await child.exited;
-    process.exit(child.exitCode ?? 0);
+	process.on("SIGINT", onExit);
+	process.on("SIGTERM", onExit);
+
+	await child.exited;
+	process.exit(child.exitCode ?? 0);
 }
 
 await main();

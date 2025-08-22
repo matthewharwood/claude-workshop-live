@@ -139,6 +139,8 @@ Each agent is a specialized Claude instance with custom configurations:
 - **gemsum** - Gemini-powered summarization
 - **claude-mix** - Mixed capabilities mode
 - **orient** - Generates a comprehensive orientation map (markdown) for a concept, feature, or file
+- **brainstorm** - Generate 5 AI agent variations from your idea and select one to develop
+- **update-claudemd** - Maintain and update CLAUDE.md files following best practices
 
 ## Development Commands
 

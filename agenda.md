@@ -1,20 +1,19 @@
 ### Claude Code Power User Workshop — Agenda
 
-Based on the August 1 workshop timeline. External links removed for a clean export.
-
-#### Loose Agenda
+#### Agenda
 
 **Part 1: Foundations and Customization**
 
 - Welcome, housekeeping, and introductions
 - Compare GPT-5 and Claude Code
 - Interactive demo: using Claude; managing Git permissions
+- Permissions: acceptEdits
 - IDE integration with Cursor; explain selected code
 - CLI print mode; `--allowedTools` for non-interactive tasks
 - Build a reusable ZSH wrapper function
 - Explore `.claude` directory and JSONL conversation logs
 - Customize behavior with `--append-system-prompt` (e.g., French, Deadpool)
-- Usage insights with `cc-usage`; subscription value
+- Usage insights with `ccusage`; subscription value
 
 **Part 2: Advanced Workflows & Context**
 
@@ -24,9 +23,11 @@ Based on the August 1 workshop timeline. External links removed for a clean expo
 - Tool demo: claude-explorer for searching past conversations
 - Mindset: “Hypothesis Mode” (try → learn → iterate)
 - Discussion: the learning curve and developer stress
-- Aliases and keywords: Opus, Dopus, Popus, UltraThink
+- Aliases and keywords: Opus, Dopus, Popus
+- Thinking budget: UltraThink
 - Security: API keys via a password manager and scoped sessions
-- Project context: `claude.md` via `/init` and conversation exports
+- Project context: `CLAUDE.md` via `/init` and conversation exports
+- Updating CLAUDE.md
 
 **Part 3: MCPs and Sandboxed Development**
 

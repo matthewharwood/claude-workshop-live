@@ -19,7 +19,7 @@ let knownAgents = new Set<string>();
 async function getCurrentAgents(): Promise<Set<string>> {
   try {
     const agents = await readdir(agentsDir);
-    return new Set(agents.filter(file => file.endsWith(".ts")));
+    return new Set(agents.filter(file => file.endsWith(".ts") || file.endsWith(".tsx")));
   } catch (error) {
     console.error("Failed to read agents directory:", error);
     return new Set();
@@ -32,14 +32,14 @@ async function compileAllAgents() {
 
   try {
     const currentAgents = await getCurrentAgents();
-    
+
     // Check for deleted agents
     for (const knownAgent of knownAgents) {
       if (!currentAgents.has(knownAgent)) {
         // Agent was deleted, remove corresponding bin file
-        const agentName = basename(knownAgent, ".ts");
+        const agentName = basename(knownAgent, ".ts").replace(".tsx", "");
         const binPath = join(binDir, agentName);
-        
+
         try {
           await unlink(binPath);
           console.log(`  ✓ Removed ${agentName} from bin directory`);
@@ -49,7 +49,7 @@ async function compileAllAgents() {
         }
       }
     }
-    
+
     // Update known agents
     knownAgents = currentAgents;
 
@@ -62,7 +62,7 @@ async function compileAllAgents() {
 
     // Compile all agents
     for (const file of currentAgents) {
-      const agentName = basename(file, ".ts");
+      const agentName = basename(file, ".ts").replace(".tsx", "");
       const filePath = join(agentsDir, file);
       const outputPath = `./bin/${agentName}`;
 
@@ -86,7 +86,7 @@ async function compileAllAgents() {
 let rebuildTimeout: NodeJS.Timeout | null = null;
 function debouncedRebuild(dir: string, filename?: string) {
   console.log(`Change detected in ${dir}: ${filename || 'unknown'}`);
-  
+
   if (rebuildTimeout) {
     clearTimeout(rebuildTimeout);
   }
@@ -98,7 +98,7 @@ function debouncedRebuild(dir: string, filename?: string) {
 
 // Create watchers
 const agentsWatcher = watch(agentsDir, { recursive: true }, (event, filename) => {
-  if (filename && filename.endsWith('.ts')) {
+  if (filename && (filename.endsWith('.ts') || filename.endsWith('.tsx'))) {
     debouncedRebuild('agents', filename);
   }
 });
